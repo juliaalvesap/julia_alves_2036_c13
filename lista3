@@ -1,0 +1,135 @@
+%% Lista 3
+clc;
+clear all;
+close all;
+%% 3.1
+
+% seno
+t = 0:0.1:10;
+y = 2*sin(3*t);
+
+
+% cosseno
+t = 0:0.1:10;
+z = 2*cos(3*t);
+
+
+figure
+plot(t,y,t,z)
+
+grid on
+legend('2*sin(3*t)', '2*cos(3*t)');
+xlabel('tempo (s)');
+ylabel('amplitude');
+title('seno e cosseno');
+
+%% 3.2
+
+x = -10:1:10;
+
+a = input('Digite o coeficiente angular: ');
+
+if a > 0
+    disp('Coeficiente Positivo')
+elseif a == 0
+    disp('Coeficiente Nulo');
+else
+    disp('Coeficiente Negativo')
+end
+
+y = a*x + 2;
+
+figure
+plot(x,y)
+grid on
+title('Função y = ax + 2')
+xlabel('x')
+ylabel('y')
+
+% janela
+axes('Position',[0.55 0.55 0.3 0.3])
+
+x2 = -2:0.1:2;
+y2 = a*x2 + 2;
+
+plot(x2,y2)
+grid on
+title('Região -2 ≤ x ≤ 2')
+xlabel('x')
+ylabel('y')
+
+%% 3.3
+
+multiplos = zeros(1,5);
+
+for i = 1:5
+    multiplos(i) = 3 * i;
+end
+
+dobro = 2 * multiplos;
+
+figure
+
+% grafico 1
+subplot(2,1,1)
+plot(multiplos)
+title('Cinco primeiros múltiplos de 3')
+xlabel('Posição')
+ylabel('Valor')
+grid on
+
+% grafico 2
+subplot(2,1,2)
+plot(dobro)
+title('Dobro dos múltiplos')
+xlabel('Posição')
+ylabel('Valor')
+grid on
+
+%% 3.4
+
+t = 0:1:1000;
+y = 50000 * exp(-0.05 * t);
+
+figure
+
+% escala normal
+subplot(2,1,1)
+plot(t,y)
+title('escala comum')
+xlabel('tempo')
+ylabel('y')
+grid on
+
+% log em y
+subplot(2,1,2)
+semilogy(t,y)
+title('escala logarítmica no eixo y')
+xlabel('tempo')
+ylabel('y')
+grid on
+
+%% 3.5
+
+[x,y] = meshgrid(1:0.5:10, 1:20);
+
+z = sin(x) + cos(y);
+
+figure
+
+% 3d
+subplot(2,1,1)
+surf(x,y,z)
+colormap("summer")
+shading interp
+xlabel('x')
+ylabel('y')
+zlabel('z')
+title('Superfície 3D')
+
+% curvas de nível
+subplot(2,1,2)
+contour(x,y,z,5)
+xlabel('x')
+ylabel('y')
+title('Curvas de nível')

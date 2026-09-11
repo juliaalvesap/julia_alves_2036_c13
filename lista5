@@ -1,0 +1,381 @@
+clc;
+clear all;
+close all;
+
+%% Questão 1
+%% Sistema de primeira ordem
+
+% G(s) = K/(Ts + 1)
+
+K = 1.8;
+T = 1.2;
+
+G = tf(K, [T 1]);
+
+% Polo do sistema
+pole(G)
+
+% Tempo de subida
+tempo_subida = 2.2*T
+
+% Tempo de acomodacao
+tempo_acomodacao = 4*T
+
+% Ganho em regime permanente
+ganho_regime = dcgain(G)
+
+% Resposta ao degrau unitario
+figure
+step(G, 8), grid
+title("Resposta ao degrau unitario")
+xlabel("Tempo (s)")
+ylabel("Amplitude")
+
+%% Degrau de amplitude 2.5
+
+amplitude = 2.5;
+
+% Novo valor final
+valor_final_2 = K*amplitude
+
+% Resposta ao degrau de amplitude 2.5
+figure
+step(amplitude*G, 8), grid
+title("Resposta ao degrau de amplitude 2.5")
+xlabel("Tempo (s)")
+ylabel("Amplitude")
+
+% Quanto maior a constante de tempo, mais lenta e a resposta.
+% Quanto mais distante o polo estiver da origem, mais rapida e a resposta.
+
+%% Questão 2
+
+clc;
+clear all;
+close all;
+
+%% Sistemas de segunda ordem
+
+% G(s) = wn^2/(s^2 + 2*zeta*wn*s + wn^2)
+
+%% Sistema A
+
+G_A = tf(25, [1 3 25]);
+
+[wn_A, zeta_A, polos_A] = damp(G_A);
+
+wn_A(1)
+zeta_A(1)
+polos_A
+dcgain(G_A)
+
+%% Sistema B
+
+G_B = tf(25, [1 10 25]);
+
+[wn_B, zeta_B, polos_B] = damp(G_B);
+
+wn_B(1)
+zeta_B(1)
+polos_B
+dcgain(G_B)
+
+%% Sistema C
+
+G_C = tf(25, [1 16 25]);
+
+[wn_C, zeta_C, polos_C] = damp(G_C);
+
+wn_C(1)
+zeta_C(1)
+polos_C
+dcgain(G_C)
+
+%% Resposta ao degrau
+
+t = 0:0.01:8;
+
+figure
+step(G_A, G_B, G_C, t), grid
+
+title("Resposta ao degrau dos tres sistemas")
+legend("Sistema A", "Sistema B", "Sistema C")
+xlabel("Tempo (s)")
+ylabel("Amplitude")
+
+%% Mapa de polos
+
+figure
+pzmap(G_A, G_B, G_C), grid
+
+title("Posicao dos polos")
+legend("Sistema A", "Sistema B", "Sistema C")
+
+% O sistema C e o mais adequado, pois nao apresenta sobressinal e possui a resposta mais rapida.
+
+%% Questão 3
+clc;
+clear all;
+close all;
+
+%% Sistemas de segunda ordem
+
+G_A = tf(25, [1 3 25]);
+G_B = tf(25, [1 10 25]);
+G_C = tf(25, [1 16 25]);
+
+%% Sistema A
+
+[wn_A, zeta_A, polos_A] = damp(G_A);
+
+wn_A(1)
+zeta_A(1)
+polos_A
+dcgain(G_A)
+
+% Sistema A: subamortecido, pois 0 < zeta < 1.
+
+%% Sistema B
+
+[wn_B, zeta_B, polos_B] = damp(G_B);
+
+wn_B(1)
+zeta_B(1)
+polos_B
+dcgain(G_B)
+
+% Sistema B: criticamente amortecido, pois zeta = 1.
+
+%% Sistema C
+
+[wn_C, zeta_C, polos_C] = damp(G_C);
+
+wn_C(1)
+zeta_C(1)
+polos_C
+dcgain(G_C)
+
+% Sistema C: superamortecido, pois zeta > 1.
+
+%% Resposta ao degrau
+
+t = 0:0.01:8;
+
+figure
+step(G_A, G_B, G_C, t), grid
+
+title("Resposta ao degrau dos tres sistemas")
+legend("Sistema A", "Sistema B", "Sistema C")
+xlabel("Tempo (s)")
+ylabel("Amplitude")
+
+%% Mapa de polos
+
+figure
+pzmap(G_A, G_B, G_C), grid
+
+title("Posicao dos polos")
+legend("Sistema A", "Sistema B", "Sistema C")
+
+%% Escolha do sistema
+
+% Sistema A apresenta sobressinal e nao atende a aplicacao.
+% Sistemas B e C nao apresentam sobressinal.
+% Sistema B e o mais rapido entre os sistemas que atendem a condicao.
+
+% Portanto, o Sistema B e o mais adequado para a aplicacao.
+
+%% Questão 4
+clc;
+clear all;
+close all;
+
+%% Sistemas de segunda ordem
+
+% G(s) = wn^2/(s^2 + 2*zeta*wn*s + wn^2)
+
+%% Configuracao A
+
+zeta_A = 0.35;
+wn_A = 6;
+
+G_A = tf(wn_A^2, [1 2*zeta_A*wn_A wn_A^2]);
+
+[wn_polos_A, zeta_polos_A, polos_A] = damp(G_A);
+
+wn_polos_A(1)
+zeta_polos_A(1)
+polos_A
+
+% Sobressinal = 31.72%
+% Tempo de subida = 0.349 s
+% Tempo de pico = 0.558 s
+% Tempo de acomodacao = 1.905 s
+% Valor final = 1
+
+%% Configuracao B
+
+zeta_B = 0.55;
+wn_B = 5;
+
+G_B = tf(wn_B^2, [1 2*zeta_B*wn_B wn_B^2]);
+
+[wn_polos_B, zeta_polos_B, polos_B] = damp(G_B);
+
+wn_polos_B(1)
+zeta_polos_B(1)
+polos_B
+
+% Sobressinal = 12.02%
+% Tempo de subida = 0.444 s
+% Tempo de pico = 0.750 s
+% Tempo de acomodacao = 1.455 s
+% Valor final = 1
+
+%% Configuracao C
+
+zeta_C = 0.70;
+wn_C = 4;
+
+G_C = tf(wn_C^2, [1 2*zeta_C*wn_C wn_C^2]);
+
+[wn_polos_C, zeta_polos_C, polos_C] = damp(G_C);
+
+wn_polos_C(1)
+zeta_polos_C(1)
+polos_C
+
+% Sobressinal = 4.60%
+% Tempo de subida = 0.761 s
+% Tempo de pico = 1.100 s
+% Tempo de acomodacao = 1.429 s
+% Valor final = 1
+
+%% Configuracao D
+
+zeta_D = 0.80;
+wn_D = 3.2;
+
+G_D = tf(wn_D^2, [1 2*zeta_D*wn_D wn_D^2]);
+
+[wn_polos_D, zeta_polos_D, polos_D] = damp(G_D);
+
+wn_polos_D(1)
+zeta_polos_D(1)
+polos_D
+
+% Sobressinal = 1.52%
+% Tempo de subida = 1.066 s
+% Tempo de pico = 2.454 s
+% Tempo de acomodacao = 1.562 s
+% Valor final = 1
+
+%% Resposta ao degrau
+
+t = 0:0.01:8;
+
+figure
+step(G_A, G_B, G_C, G_D, t), grid
+
+title("Resposta ao degrau das quatro configuracoes")
+legend("A", "B", "C", "D")
+xlabel("Tempo (s)")
+ylabel("Amplitude")
+
+%% Analise dos requisitos
+
+% A: nao atende aos requisitos.
+% B: nao atende ao sobressinal.
+% C: atende aos dois requisitos.
+% D: nao atende ao tempo de acomodacao.
+
+% Entre as configuracoes validas, C apresenta o menor tempo de subida.
+% Portanto, a Configuracao C e a escolhida para a aplicacao.
+
+% O grafico mostra que C apresenta baixo sobressinal sem comprometer excessivamente a rapidez.
+% As demais configuracoes falham em pelo menos um dos requisitos da aplicacao.
+
+
+%% Questão 5
+clc;
+clear all;
+close all;
+
+%% Equipamento A - Sistema de primeira ordem
+
+G_A = tf(2, [1.2 1]);
+
+pole(G_A)
+dcgain(G_A)
+
+% Tempo de subida (10% a 90%)
+tempo_subida_A = 2.2*1.2
+
+% Tempo de acomodacao (2%)
+tempo_acomodacao_A = 4*1.2
+
+% Valor final = 2
+
+%% Equipamento B - Sistema de segunda ordem
+
+G_B = tf(32, [1 5.6 16]);
+
+[wn_B, zeta_B, polos_B] = damp(G_B);
+
+wn_B(1)
+zeta_B(1)
+polos_B
+dcgain(G_B)
+
+% Frequencia natural = 4 rad/s
+% Coeficiente de amortecimento = 0.7
+
+% Tempo de subida (10% a 90%)
+tempo_subida_B = 0.761
+
+% Tempo de acomodacao (2%)
+tempo_acomodacao_B = 4/(zeta_B(1)*wn_B(1))
+
+% Tempo de pico
+tempo_pico_B = pi/(wn_B(1)*sqrt(1-zeta_B(1)^2))
+
+% Maximo sobressinal = 4.60%
+sobressinal_B = exp((-zeta_B(1)*pi)/sqrt(1-zeta_B(1)^2))*100
+
+% Valor do primeiro pico
+primeiro_pico_B = 2*(1 + sobressinal_B/100)
+
+% Valor final = 2
+
+%% Resposta ao degrau unitario
+
+t = 0:0.01:8;
+
+figure
+step(G_A, G_B, t), grid
+
+title("Resposta ao degrau unitario")
+legend("Equipamento A", "Equipamento B")
+xlabel("Tempo (s)")
+ylabel("Amplitude")
+
+%% Entrada de amplitude 1.5
+
+amplitude = 1.5;
+
+% Valor final para os dois equipamentos = 3
+
+valor_final_A = dcgain(G_A)*amplitude
+valor_final_B = dcgain(G_B)*amplitude
+
+figure
+step(amplitude*G_A, amplitude*G_B, t), grid
+
+title("Resposta ao degrau de amplitude 1.5")
+legend("Equipamento A", "Equipamento B")
+xlabel("Tempo (s)")
+ylabel("Amplitude")
+
+% O Equipamento B apresenta uma resposta mais rapida que o Equipamento A.
+% O Equipamento A nao apresenta sobressinal, enquanto o B apresenta sobressinal de aproximadamente 4.60%.
+% Os dois equipamentos apresentam o mesmo ganho e, portanto, o mesmo valor final em regime permanente.
